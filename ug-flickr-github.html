@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" href="./unitegallery/css/unite-gallery.css" type="text/css" />
+<meta charset="utf-8">
+<title>Example Gallery</title>
+</head>
+
+<body>
+	<div id="gallery" style="display:none;"></div>
+
+<script type="text/javascript" src="./unitegallery/js/jquery-11.0.min.js"></script>
+<script type="text/javascript" src="./unitegallery/js/unitegallery.min.js"></script>
+<script type="text/javascript" src="./unitegallery/themes/tiles/ug-theme-tiles.js"></script>
+	
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            const apiKey = "YOUR-API-KEY"; // Your Flickr API key
+			// Get these from the URL of the album you need.  Flickr formats this as flickr.com/photos/USER ID/albums/ALBUM ID/
+			// There is one exception to this, exemplified below.
+			// In the example below, the user who created the album has a claimed username, claudecastor. We cannot use this, we must get the actual user ID
+			// Using webfx.com/tools/idgettr, we can determine their actual User ID is 67995615@N03
+            const albumId = "72157718908695089"; // Flickr album ID
+            const userId = "67995615@N03"; // Flickr user ID, found in
+
+            const apiUrl = `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${albumId}&user_id=${userId}&extras=url_o&format=json&nojsoncallback=1`;
+
+            // Fetch public photos from the Flickr album
+			fetch(apiUrl)
+				.then(response => response.json())
+				.then(data => {
+					if (!data.photoset || !data.photoset.photo) {
+						console.error("No photos found in the album.");
+						return;
+					}
+
+					const photos = data.photoset.photo;
+					const gallery = jQuery("#gallery");
+
+					photos.forEach(photo => {
+						const fullImageUrl = photo.url_o || ''; // Original image URL
+						const thumbnailUrl = `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_z.jpg`; // Medium thumbnail
+
+						// Append to gallery
+						gallery.append(`
+							<img 
+								alt="${photo.title}" 
+								src="${thumbnailUrl}" 
+								data-image="${fullImageUrl}" 
+								data-description="${photo.title}">
+						`);
+					});
+
+					gallery.unitegallery({
+						tiles_type:"nested",
+						gallery_enable_loadmore:"true",
+						gallery_images_preload_type:"visible",
+						lightbox_overlay_opacity:"0.9"
+					});
+				})
+				.catch(error => console.error("Error fetching Flickr photos:", error));
+
+        });
+    </script>
+</body>
+</html>
