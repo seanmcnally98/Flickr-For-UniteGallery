@@ -4,6 +4,7 @@ Allows UniteGallery to load images from Flickr
 ## Why does this exist?
 
 Simply, because I needed it to.  I wanted to convert a legacy website that previously used flickrembed.com to create galleries (I wouldn't recommend following that link today, it's been replaced with something that looks rather spammy).  
+
 Well, as it turns out, flickrembed just used UniteGallery as a backend, so I figured if I could get UniteGallery to import Flickr images, everything would work.  And it did!
 
 ...sort of.  This requires using the Flickr API, which has seemingly arbitrary rate limits (or at least ones I can't find documentation on).  So, if you're trying to get a huge album or you load a bunch of times in rapid succession, it just plain doesn't work.  If I were to take a guess, some change on Flickr's end with the API might have caused the original flickrembed to shut down.  But, I'd say it is worth trying out!  So, bearing that in mind, if you still want to do this...
@@ -11,6 +12,7 @@ Well, as it turns out, flickrembed just used UniteGallery as a backend, so I fig
 ## How does it work?
 
 Basically just makes an API call to Flickr, gets a list of image URLs, then adds them to a UniteGallery Gallery
+
 To use this, take a look at the ug-flickr-github.html example file.
 
 ## Quick Start Guide
